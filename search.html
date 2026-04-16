@@ -3,42 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>座位查询</title>
+    <title>座位查询 - 中国电信云生态大会</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: url('seat-map.jpg') no-repeat center center;
+            background-size: cover;
             min-height: 100vh;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-end;
             padding: 20px;
         }
+        /* Dark overlay to ensure readability of content */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.45);
+            z-index: -1;
+        }
         .container {
-            background: #fff;
+            background: rgba(255,255,255,0.96);
             border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
             width: 100%;
             max-width: 480px;
             overflow: hidden;
         }
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             color: #fff;
-            padding: 30px 20px;
+            padding: 28px 20px;
             text-align: center;
         }
-        .header h1 { font-size: 24px; margin-bottom: 8px; }
-        .header p { font-size: 14px; opacity: 0.9; }
+        .header h1 {
+            font-size: 19px;
+            margin-bottom: 6px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        .header p {
+            font-size: 12px;
+            opacity: 0.85;
+            color: #ccc;
+        }
         
-        .content { padding: 30px 20px; }
+        .content { padding: 28px 20px; }
         
         /* Step 1: Name Input */
         .search-box { display: flex; gap: 10px; }
         .search-box input {
             flex: 1;
-            padding: 15px 18px;
+            padding: 14px 16px;
             font-size: 16px;
             border: 2px solid #e0e0e0;
             border-radius: 12px;
@@ -47,7 +65,7 @@
         }
         .search-box input:focus { border-color: #667eea; }
         .search-box button {
-            padding: 15px 24px;
+            padding: 14px 22px;
             font-size: 16px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: #fff;
@@ -63,12 +81,12 @@
         .company-list h3 { 
             text-align: center; 
             color: #333; 
-            margin-bottom: 20px;
-            font-size: 16px;
+            margin-bottom: 18px;
+            font-size: 15px;
         }
         .company-item {
             display: block;
-            padding: 15px 18px;
+            padding: 14px 16px;
             margin-bottom: 10px;
             border: 2px solid #e0e0e0;
             border-radius: 12px;
@@ -87,21 +105,21 @@
         .result .seat-info {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: #fff;
-            padding: 30px;
+            padding: 28px;
             border-radius: 16px;
-            margin-bottom: 20px;
+            margin-bottom: 18px;
         }
-        .result .seat-label { font-size: 14px; opacity: 0.9; margin-bottom: 8px; }
-        .result .seat-number { font-size: 36px; font-weight: 700; }
+        .result .seat-label { font-size: 13px; opacity: 0.9; margin-bottom: 8px; }
+        .result .seat-number { font-size: 34px; font-weight: 700; }
         .result .seat-company { 
-            margin-top: 15px; 
-            font-size: 14px; 
+            margin-top: 14px; 
+            font-size: 13px; 
             opacity: 0.85;
             word-break: break-all;
         }
         .result button {
             width: 100%;
-            padding: 15px;
+            padding: 14px;
             font-size: 16px;
             background: #fff;
             color: #667eea;
@@ -121,7 +139,7 @@
             display: none;
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.85);
             justify-content: center;
             align-items: center;
             z-index: 1000;
@@ -137,7 +155,7 @@
             overflow: auto;
         }
         .modal-header {
-            padding: 15px 20px;
+            padding: 14px 18px;
             border-bottom: 1px solid #eee;
             display: flex;
             justify-content: space-between;
@@ -145,14 +163,14 @@
         }
         .modal-header h3 { color: #333; }
         .modal-close {
-            width: 32px; height: 32px;
+            width: 30px; height: 30px;
             border: none;
             background: #f0f0f0;
             border-radius: 50%;
             cursor: pointer;
             font-size: 18px;
         }
-        .modal-body { padding: 20px; }
+        .modal-body { padding: 18px; }
         .modal-body img {
             width: 100%;
             height: auto;
@@ -161,11 +179,11 @@
         
         .back-btn {
             display: inline-block;
-            padding: 10px 20px;
+            padding: 8px 18px;
             color: #667eea;
             text-decoration: none;
-            font-size: 14px;
-            margin-bottom: 15px;
+            font-size: 13px;
+            margin-bottom: 14px;
             cursor: pointer;
         }
         .back-btn:hover { text-decoration: underline; }
@@ -182,8 +200,8 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🪑 座位查询</h1>
-            <p>输入您的姓名即可查询座位</p>
+            <h1>中国电信云生态大会<br>智能云应用论坛</h1>
+            <p>输入姓名查询您的座位</p>
         </div>
         
         <div class="content">
@@ -290,8 +308,7 @@
         }
         
         function showMap() {
-            // TODO: Replace with actual seat map image URL
-            document.getElementById('seatMapImg').src = 'seat-map.png';
+            document.getElementById('seatMapImg').src = 'seat-map.jpg';
             document.getElementById('mapModal').classList.add('active');
         }
         
