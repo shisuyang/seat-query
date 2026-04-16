@@ -12,46 +12,50 @@
             background-size: cover;
             min-height: 100vh;
             display: flex;
-            justify-content: center;
-            align-items: flex-end;
-            padding: 20px;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 60px 20px 40px;
         }
-        /* Dark overlay to ensure readability of content */
         body::before {
             content: '';
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.45);
+            background: rgba(0,0,0,0.5);
             z-index: -1;
         }
-        .container {
-            background: rgba(255,255,255,0.96);
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
-            width: 100%;
-            max-width: 480px;
-            overflow: hidden;
-        }
-        .header {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            color: #fff;
-            padding: 28px 20px;
+
+        /* Title block */
+        .title-block {
             text-align: center;
+            color: #fff;
+            margin-bottom: 36px;
         }
-        .header h1 {
-            font-size: 19px;
-            margin-bottom: 6px;
+        .title-block h1 {
+            font-size: 22px;
             font-weight: 700;
             letter-spacing: 1px;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+            line-height: 1.4;
         }
-        .header p {
-            font-size: 12px;
-            opacity: 0.85;
-            color: #ccc;
+        .title-block p {
+            font-size: 13px;
+            opacity: 0.8;
+            margin-top: 8px;
+            color: #e0e0e0;
         }
-        
-        .content { padding: 28px 20px; }
-        
+
+        /* Floating card */
+        .card {
+            background: rgba(255,255,255,0.92);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 28px 24px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+
         /* Step 1: Name Input */
         .search-box { display: flex; gap: 10px; }
         .search-box input {
@@ -73,33 +77,34 @@
             border-radius: 12px;
             cursor: pointer;
             font-weight: 600;
+            white-space: nowrap;
         }
         .search-box button:active { transform: scale(0.98); }
-        
+
         /* Step 2: Company Selection */
         .company-list { display: none; }
-        .company-list h3 { 
-            text-align: center; 
-            color: #333; 
-            margin-bottom: 18px;
+        .company-list h3 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 16px;
             font-size: 15px;
         }
         .company-item {
             display: block;
-            padding: 14px 16px;
+            padding: 13px 16px;
             margin-bottom: 10px;
             border: 2px solid #e0e0e0;
             border-radius: 12px;
             cursor: pointer;
             transition: all 0.3s;
         }
-        .company-item:hover { 
-            border-color: #667eea; 
+        .company-item:hover {
+            border-color: #667eea;
             background: #f8f6ff;
         }
-        .company-item .name { font-weight: 600; color: #333; }
-        .company-item .company { font-size: 13px; color: #888; margin-top: 4px; }
-        
+        .company-item .name { font-weight: 600; color: #333; font-size: 15px; }
+        .company-item .company { font-size: 12px; color: #888; margin-top: 3px; }
+
         /* Result */
         .result { display: none; text-align: center; }
         .result .seat-info {
@@ -107,13 +112,13 @@
             color: #fff;
             padding: 28px;
             border-radius: 16px;
-            margin-bottom: 18px;
+            margin-bottom: 16px;
         }
         .result .seat-label { font-size: 13px; opacity: 0.9; margin-bottom: 8px; }
         .result .seat-number { font-size: 34px; font-weight: 700; }
-        .result .seat-company { 
-            margin-top: 14px; 
-            font-size: 13px; 
+        .result .seat-company {
+            margin-top: 12px;
+            font-size: 13px;
             opacity: 0.85;
             word-break: break-all;
         }
@@ -129,11 +134,31 @@
             font-weight: 600;
             transition: all 0.3s;
         }
-        .result button:hover { 
-            background: #667eea; 
+        .result button:hover {
+            background: #667eea;
             color: #fff;
         }
-        
+
+        /* Error */
+        .error {
+            text-align: center;
+            color: #e74c3c;
+            padding: 20px;
+            display: none;
+        }
+        .error.show { display: block; }
+
+        /* Back btn */
+        .back-btn {
+            display: inline-block;
+            padding: 8px 0;
+            color: #667eea;
+            font-size: 13px;
+            margin-bottom: 14px;
+            cursor: pointer;
+        }
+        .back-btn:hover { text-decoration: underline; }
+
         /* Seat Map Modal */
         .modal {
             display: none;
@@ -176,67 +201,67 @@
             height: auto;
             border-radius: 8px;
         }
-        
-        .back-btn {
-            display: inline-block;
-            padding: 8px 18px;
-            color: #667eea;
-            text-decoration: none;
-            font-size: 13px;
-            margin-bottom: 14px;
-            cursor: pointer;
+
+        /* Step indicator */
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 20px;
         }
-        .back-btn:hover { text-decoration: underline; }
-        
-        .error {
-            text-align: center;
-            color: #e74c3c;
-            padding: 20px;
-            display: none;
+        .step-dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: #e0e0e0;
         }
-        .error.show { display: block; }
+        .step-dot.active {
+            background: #667eea;
+            width: 24px;
+            border-radius: 4px;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>中国电信云生态大会<br>智能云应用论坛</h1>
-            <p>输入姓名查询您的座位</p>
+
+    <!-- Title -->
+    <div class="title-block">
+        <h1>中国电信云生态大会<br>智能云应用论坛</h1>
+        <p>输入姓名查询您的座位</p>
+    </div>
+
+    <!-- Card -->
+    <div class="card">
+        <!-- Step 1: Name Input -->
+        <div class="search-box" id="step1">
+            <input type="text" id="nameInput" placeholder="请输入您的姓名" autocomplete="off">
+            <button onclick="searchByName()">查询</button>
         </div>
-        
-        <div class="content">
-            <!-- Step 1: Name Input -->
-            <div class="search-box" id="step1">
-                <input type="text" id="nameInput" placeholder="请输入您的姓名" autocomplete="off">
-                <button onclick="searchByName()">查询</button>
+
+        <!-- Step 2: Company Selection -->
+        <div class="company-list" id="step2">
+            <span class="back-btn" onclick="goBack()">← 重新查询</span>
+            <h3>找到多位同名嘉宾，请选择您的公司</h3>
+            <div id="companyList"></div>
+        </div>
+
+        <!-- Error -->
+        <div class="error" id="error">
+            <p>未找到匹配的嘉宾信息</p>
+            <p style="font-size:13px;margin-top:8px;color:#888;">请确认姓名输入正确</p>
+        </div>
+
+        <!-- Result -->
+        <div class="result" id="result">
+            <span class="back-btn" onclick="goBack()">← 重新查询</span>
+            <div class="seat-info">
+                <div class="seat-label">您的座位是</div>
+                <div class="seat-number" id="seatNumber">-</div>
+                <div class="seat-company" id="seatCompany"></div>
             </div>
-            
-            <!-- Step 2: Company Selection (for duplicates) -->
-            <div class="company-list" id="step2">
-                <span class="back-btn" onclick="goBack()">← 重新查询</span>
-                <h3>找到多位同名嘉宾，请选择您的公司</h3>
-                <div id="companyList"></div>
-            </div>
-            
-            <!-- Error -->
-            <div class="error" id="error">
-                <p>未找到匹配的嘉宾信息</p>
-                <p style="font-size:13px;margin-top:8px;color:#888;">请确认姓名输入正确</p>
-            </div>
-            
-            <!-- Result -->
-            <div class="result" id="result">
-                <span class="back-btn" onclick="goBack()">← 重新查询</span>
-                <div class="seat-info">
-                    <div class="seat-label">您的座位是</div>
-                    <div class="seat-number" id="seatNumber">-</div>
-                    <div class="seat-company" id="seatCompany"></div>
-                </div>
-                <button onclick="showMap()">📍 查看座位图</button>
-            </div>
+            <button onclick="showMap()">📍 查看座位图</button>
         </div>
     </div>
-    
+
     <!-- Seat Map Modal -->
     <div class="modal" id="mapModal">
         <div class="modal-content">
@@ -252,28 +277,21 @@
 
     <script>
         let seatsData = [];
-        
-        // Load data on page load
         fetch('seats.json')
             .then(r => r.json())
             .then(d => seatsData = d.seats)
             .catch(e => console.error('Failed to load seats.json', e));
-        
+
         const nameInput = document.getElementById('nameInput');
-        
-        // Enter key support
         nameInput.addEventListener('keypress', e => {
             if (e.key === 'Enter') searchByName();
         });
-        
+
         function searchByName() {
             const name = nameInput.value.trim();
             if (!name) return;
-            
             const matches = seatsData.filter(s => s.name === name);
-            
             hideAll();
-            
             if (matches.length === 0) {
                 document.getElementById('error').classList.add('show');
             } else if (matches.length === 1) {
@@ -282,11 +300,10 @@
                 showCompanySelection(matches);
             }
         }
-        
+
         function showCompanySelection(matches) {
             const container = document.getElementById('companyList');
             container.innerHTML = '';
-            
             matches.forEach(seat => {
                 const div = document.createElement('div');
                 div.className = 'company-item';
@@ -297,40 +314,38 @@
                 div.onclick = () => showResult(seat);
                 container.appendChild(div);
             });
-            
             document.getElementById('step2').style.display = 'block';
         }
-        
+
         function showResult(seat) {
             document.getElementById('seatNumber').textContent = seat.seatRaw;
             document.getElementById('seatCompany').textContent = seat.company;
             document.getElementById('result').style.display = 'block';
         }
-        
+
         function showMap() {
             document.getElementById('seatMapImg').src = 'seat-map.jpg';
             document.getElementById('mapModal').classList.add('active');
         }
-        
+
         function closeMap() {
             document.getElementById('mapModal').classList.remove('active');
         }
-        
+
         function goBack() {
             hideAll();
             document.getElementById('step1').style.display = 'flex';
             nameInput.value = '';
             nameInput.focus();
         }
-        
+
         function hideAll() {
             document.getElementById('step1').style.display = 'none';
             document.getElementById('step2').style.display = 'none';
             document.getElementById('error').classList.remove('show');
             document.getElementById('result').style.display = 'none';
         }
-        
-        // Click outside modal to close
+
         document.getElementById('mapModal').addEventListener('click', e => {
             if (e.target.id === 'mapModal') closeMap();
         });
