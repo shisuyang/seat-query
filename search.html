@@ -318,9 +318,12 @@
         }
 
         function showResult(seat) {
-            document.getElementById('seatNumber').textContent = seat.seatRaw;
-            document.getElementById('seatCompany').textContent = seat.company;
-            document.getElementById('result').style.display = 'block';
+            const params = new URLSearchParams({
+                name: seat.name,
+                seat: seat.seatRaw,
+                company: seat.company
+            });
+            window.location.href = 'result.html?' + params.toString();
         }
 
         function showMap() {
